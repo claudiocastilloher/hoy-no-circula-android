@@ -1,6 +1,7 @@
-package com.example.hoynocirculacdmx.usecase
+package com.example.hoynocirculacdmx.domain.usecase
 import com.example.hoynocirculacdmx.domain.model.DayRestriction
 import com.example.hoynocirculacdmx.domain.model.StickerColor
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -40,31 +41,31 @@ class GetTodayRestrictionUseCase {
         ).replaceFirstChar { it.uppercase() }
 
         return when (dayOfWeek){
-            java.time.DayOfWeek.MONDAY -> DayRestriction(
+            DayOfWeek.MONDAY -> DayRestriction(
                 dayName = dayName,
                 stickerColor = StickerColor.AMARILLO,
                 restrictedPlates = listOf(5,6)
             )
 
-            java.time.DayOfWeek.TUESDAY -> DayRestriction(
+            DayOfWeek.TUESDAY -> DayRestriction(
                 dayName = dayName,
                 stickerColor = StickerColor.ROSA,
                 restrictedPlates = listOf(7,8)
             )
 
-            java.time.DayOfWeek.WEDNESDAY -> DayRestriction(
+            DayOfWeek.WEDNESDAY -> DayRestriction(
                 dayName = dayName,
                 stickerColor = StickerColor.ROJO,
                 restrictedPlates = listOf(3,4)
             )
 
-            java.time.DayOfWeek.THURSDAY -> DayRestriction(
+            DayOfWeek.THURSDAY -> DayRestriction(
                 dayName = dayName,
                 stickerColor = StickerColor.VERDE,
                 restrictedPlates = listOf(1,2)
             )
 
-            java.time.DayOfWeek.FRIDAY -> DayRestriction(
+            DayOfWeek.FRIDAY -> DayRestriction(
                 dayName = dayName,
                 stickerColor = StickerColor.AZUL,
                 restrictedPlates = listOf(9,0)

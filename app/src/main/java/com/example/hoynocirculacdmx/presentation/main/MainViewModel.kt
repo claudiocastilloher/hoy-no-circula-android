@@ -2,8 +2,7 @@ package com.example.hoynocirculacdmx.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hoynocirculacdmx.domain.model.StickerColor
-import com.example.hoynocirculacdmx.usecase.GetTodayRestrictionUseCase
+import com.example.hoynocirculacdmx.domain.usecase.GetTodayRestrictionUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
