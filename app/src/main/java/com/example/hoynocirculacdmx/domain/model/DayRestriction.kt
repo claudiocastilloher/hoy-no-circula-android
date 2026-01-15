@@ -5,9 +5,9 @@ import java.time.DayOfWeek
 /**
  *  Representa la restricción de circulacion para un día específico.
  *
- * @property dayName Nombre del día (ej. Lunes)
+ * @property dayOfWeek Nombre del día (ej. Lunes)
  * @property stickerColor Color del engomado correspondiente
- * @property restrictedPlates Lista de terminaciones de placa que NO circulan
+ * @property isRestricted Holograma
  */
 
 data class DayRestriction(
