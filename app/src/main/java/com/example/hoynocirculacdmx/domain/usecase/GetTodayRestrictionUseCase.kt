@@ -1,86 +1,97 @@
 package com.example.hoynocirculacdmx.domain.usecase
 import com.example.hoynocirculacdmx.domain.model.DayRestriction
+import com.example.hoynocirculacdmx.domain.model.Hologram
 import com.example.hoynocirculacdmx.domain.model.StickerColor
+import com.example.hoynocirculacdmx.domain.rules.StickerRules
+import com.example.hoynocirculacdmx.domain.rules.WeeklyRestrictionRule
+import java.time.Clock
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
 /**
- *  Caso de uso que obtiene la restricción de circulación
- *  correspondiente al día actual, considerando la regla
- *  simplificada del programa Hoy No Circula.
+ *  Caso de uso central que determina la restricción de circulación
+ *  para el día actual, considerando:
+ *  - Dia de la semana
+ *  - Engomado (por placa)
+ *  - Holograma
  *
- *  Este UseCase pertenece al dominio:
- *  - No depende de Android
- *  - No conce la UI
- *  - Solo aplica reglas de negocio
+ *  No depende de Android ni de UI
+ *
  */
 
-class GetTodayRestrictionUseCase {
+class GetTodayRestrictionUseCase(
+    private val clock: Clock = Clock.systemDefaultZone()
+) {
+
     /**
-     *  Ejecuta el caso de uso.
+     * Ejecuta el caso de uso.
      *
-     *  @return DayRestriction con la información del día actual
+     * @param plateLastDigit último dígito de la placa
+     * @param holograma holograma del vehículo
      */
 
-    fun execute(): DayRestriction {
-        val today = LocalDate.now()
+    fun execute(
+        plateLastDigit: Int,
+        holograma: Hologram
+    ): DayRestriction {
+        val today = LocalDate.now(clock)
         val dayOfWeek = today.dayOfWeek
 
+        // Regla 1: obtener engomado por placa
+        val stickerColor = StickerRules.fromPlateLastDigit(plateLastDigit)
 
-        val spanishLocale = Locale.Builder()
-            .setLanguage("es")
-            .setRegion("ES")
-            .build()
+        // Regla 2: engomado restringido por día
+        val restrictedSticker =
+            WeeklyRestrictionRule.restrictedStickerFor(dayOfWeek)
 
-        // Nombre del día en español (para mostrar en UI)
-        val dayName = dayOfWeek.getDisplayName(
-            TextStyle.FULL,
-            spanishLocale
-        ).replaceFirstChar { it.uppercase() }
-
-        return when (dayOfWeek){
-            DayOfWeek.MONDAY -> DayRestriction(
-                dayName = dayName,
-                stickerColor = StickerColor.AMARILLO,
-                restrictedPlates = listOf(5,6)
-            )
-
-            DayOfWeek.TUESDAY -> DayRestriction(
-                dayName = dayName,
-                stickerColor = StickerColor.ROSA,
-                restrictedPlates = listOf(7,8)
-            )
-
-            DayOfWeek.WEDNESDAY -> DayRestriction(
-                dayName = dayName,
-                stickerColor = StickerColor.ROJO,
-                restrictedPlates = listOf(3,4)
-            )
-
-            DayOfWeek.THURSDAY -> DayRestriction(
-                dayName = dayName,
-                stickerColor = StickerColor.VERDE,
-                restrictedPlates = listOf(1,2)
-            )
-
-            DayOfWeek.FRIDAY -> DayRestriction(
-                dayName = dayName,
-                stickerColor = StickerColor.AZUL,
-                restrictedPlates = listOf(9,0)
-            )
-
-            // Sábado y domingo no aplican restricciones
-            else -> DayRestriction(
-                dayName = dayName,
-                stickerColor = StickerColor.AZUL,
-                restrictedPlates = emptyList()
-            )
-
-
-
+        // Regla 3: decisión final
+        val isRestricted = when {
+            restrictedSticker == null -> false //fin de semana
+            holograma.permiteCircularSiempre() -> false
+            restrictedSticker == stickerColor -> true
+            else -> false
         }
 
+        return DayRestriction(
+            dayOfWeek = dayOfWeek,
+            stickerColor = stickerColor,
+            isRestricted = isRestricted
+        )
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

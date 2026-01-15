@@ -1,5 +1,7 @@
 package com.example.hoynocirculacdmx.domain.model
 
+import java.time.DayOfWeek
+
 /**
  *  Representa la restricción de circulacion para un día específico.
  *
@@ -9,7 +11,7 @@ package com.example.hoynocirculacdmx.domain.model
  */
 
 data class DayRestriction(
-    val dayName : String,
+    val dayOfWeek: DayOfWeek,
     val stickerColor: StickerColor,
-    val restrictedPlates: List<Int>
+    val isRestricted: Boolean
 )
