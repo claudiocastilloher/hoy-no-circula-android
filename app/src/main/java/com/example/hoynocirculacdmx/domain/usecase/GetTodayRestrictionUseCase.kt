@@ -1,14 +1,10 @@
 package com.example.hoynocirculacdmx.domain.usecase
 import com.example.hoynocirculacdmx.domain.model.DayRestriction
-import com.example.hoynocirculacdmx.domain.model.Hologram
-import com.example.hoynocirculacdmx.domain.model.StickerColor
+import com.example.hoynocirculacdmx.domain.model.Holograma
 import com.example.hoynocirculacdmx.domain.rules.StickerRules
 import com.example.hoynocirculacdmx.domain.rules.WeeklyRestrictionRule
 import java.time.Clock
-import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
 
 /**
  *  Caso de uso central que determina la restricción de circulación
@@ -34,7 +30,7 @@ class GetTodayRestrictionUseCase(
 
     fun execute(
         plateLastDigit: Int,
-        holograma: Hologram
+        holograma: Holograma
     ): DayRestriction {
         val today = LocalDate.now(clock)
         val dayOfWeek = today.dayOfWeek
