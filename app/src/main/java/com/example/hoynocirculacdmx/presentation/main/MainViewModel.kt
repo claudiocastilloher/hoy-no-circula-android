@@ -1,11 +1,14 @@
 package com.example.hoynocirculacdmx.presentation.main
 
+import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hoynocirculacdmx.domain.model.Holograma
 import com.example.hoynocirculacdmx.domain.usecase.GetTodayRestrictionUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 /**
  *  ViewModel de la pantalla principal
@@ -37,12 +40,20 @@ class MainViewModel(
 
     private fun loadTodayRestriction(){
         viewModelScope.launch {
-            val restriction = getTodayRestrictionUseCase.execute()
+            val restriction = getTodayRestrictionUseCase.execute(
+                plateLastDigit = 5, //ejemplo
+                holograma = Holograma.ONE //ejemplo
+            )
+
+            // Presentación: nombre del día en español
+            val dayName = restriction.dayOfWeek
+                .getDisplayName(TextStyle.FULL, Locale("es","MX"))
+                .replaceFirstChar { it.uppercase() }
 
             _uiState.value = MainUiState(
-                dayName = restriction.dayName,
+                dayName = dayName,
                 stickerColor = restriction.stickerColor,
-                restrictedPlates = restriction.restrictedPlates
+                isRestricted = restriction.isRestricted
             )
         }
     }

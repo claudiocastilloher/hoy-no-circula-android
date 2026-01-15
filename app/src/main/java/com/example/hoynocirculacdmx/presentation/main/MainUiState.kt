@@ -10,5 +10,5 @@ import com.example.hoynocirculacdmx.domain.model.StickerColor
 data class MainUiState(
     val dayName: String = "",
     val stickerColor: StickerColor = StickerColor.AZUL,
-    val restrictedPlates: List<Int> = emptyList()
+    val isRestricted: Boolean = false
 )
