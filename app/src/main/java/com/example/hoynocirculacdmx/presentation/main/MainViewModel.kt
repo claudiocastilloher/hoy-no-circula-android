@@ -1,6 +1,5 @@
 package com.example.hoynocirculacdmx.presentation.main
 
-import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hoynocirculacdmx.domain.model.Holograma
@@ -8,6 +7,7 @@ import com.example.hoynocirculacdmx.domain.usecase.GetTodayRestrictionUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.format.TextStyle
 import java.util.Locale
 
 /**
@@ -45,9 +45,14 @@ class MainViewModel(
                 holograma = Holograma.ONE //ejemplo
             )
 
+            val locale = Locale.Builder()
+                .setLanguage("es")
+                .setRegion("MX")
+                .build()
+
             // Presentación: nombre del día en español
             val dayName = restriction.dayOfWeek
-                .getDisplayName(TextStyle.FULL, Locale("es","MX"))
+                .getDisplayName(TextStyle.FULL, locale)
                 .replaceFirstChar { it.uppercase() }
 
             _uiState.value = MainUiState(
